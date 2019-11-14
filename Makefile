@@ -7,8 +7,15 @@ GIT_SHORT_HASH = $(shell git rev-parse --short HEAD)
 clean:
 	xcrun swift package clean
 
+install: build
+	mkdir -p $(PREFIX)/bin
+	mkdir -p $(PREFIX)/lib/xcdiff
+	cp -f $(BUILD_PATH) $(INSTALL_PATH)
+	cp -f $(SWIFT_LIB_FILES) $(LIB_INSTALL_PATH)
+
 build:
-	xcrun swift build --disable-sandbox -c release
+	swift package clean
+	swift build --disable-sandbox -c release --static-swift-stdlib
 
 test:
 	xcrun swift test
